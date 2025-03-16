@@ -108,7 +108,7 @@
 
     <div class="container">
         <h1>Countdown Timer</h1>
-        <div class="time" id="display">00:00</div>
+        <div class="time" id="display">00:00:00</div>
         <input type="number" id="minutesInput" placeholder="Minutes" min="1">
         <div class="controls">
             <button class="start" onclick="restartTimer()">Start</button>
@@ -117,11 +117,14 @@
         </div>
     </div>
 
+    <audio id="alarmSound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
+
     <script>
         let timer;
         let timeLeft = 0;
         let running = false;
         let paused = false;
+        const alarmSound = document.getElementById("alarmSound");
 
         function restartTimer() {
             clearInterval(timer);
@@ -132,6 +135,8 @@
                 paused = false;
                 updateDisplay();
                 timer = setInterval(updateTimer, 1000);
+
+                alarmSound.play().then(() => alarmSound.pause()).catch(() => console.log("Audio playback blocked by browser"));
             }
         }
 
@@ -142,14 +147,19 @@
             } else {
                 clearInterval(timer);
                 running = false;
+                alarmSound.currentTime = 0;
+                alarmSound.play();
             }
         }
 
         function updateDisplay() {
-            let minutes = Math.floor(timeLeft / 60);
+            let hours = Math.floor(timeLeft / 3600);
+            let minutes = Math.floor((timeLeft % 3600) / 60);
             let seconds = timeLeft % 60;
             document.getElementById("display").innerText =
-                (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+                (hours < 10 ? "0" : "") + hours + ":" +
+                (minutes < 10 ? "0" : "") + minutes + ":" +
+                (seconds < 10 ? "0" : "") + seconds;
         }
 
         function togglePauseResume() {
