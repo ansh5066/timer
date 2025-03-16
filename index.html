@@ -21,7 +21,7 @@
             overflow: hidden;
             position: relative;
         }
-
+        
         @keyframes moveStars {
             from {
                 transform: translateY(0px);
@@ -117,14 +117,11 @@
         </div>
     </div>
 
-    <audio id="alarmSound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
-
     <script>
         let timer;
         let timeLeft = 0;
         let running = false;
         let paused = false;
-        const alarmSound = document.getElementById("alarmSound");
 
         function restartTimer() {
             clearInterval(timer);
@@ -135,8 +132,6 @@
                 paused = false;
                 updateDisplay();
                 timer = setInterval(updateTimer, 1000);
-
-                alarmSound.play().then(() => alarmSound.pause()).catch(() => console.log("Audio playback blocked by browser"));
             }
         }
 
@@ -147,8 +142,6 @@
             } else {
                 clearInterval(timer);
                 running = false;
-                alarmSound.currentTime = 0;
-                alarmSound.play();
             }
         }
 
